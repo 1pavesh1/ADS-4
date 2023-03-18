@@ -1,8 +1,8 @@
 // Copyright 2021 NNTU-CS
-int countPairs1(int *arr, int len, int value) {
-    int temp = 0, count = 0;
+void sort(int *arr, int len) {
+    int temp = 0;
     for (int i = 0; i < len; ++i) {
-        for (int j = 0; j < len - 1 - i; ++j) {
+        for (int j = 0; j < len - 1; ++j) {
             if (arr[j] > arr[j + 1]) {
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -10,74 +10,71 @@ int countPairs1(int *arr, int len, int value) {
             }
         }
     }
-    for (int i = 0; i < len; ++i) {
-        for (int j = 1; j < len; ++j) {
+}
+
+int countPairs1(int *arr, int len, int value) {
+    int count = 0;
+    sort(arr, len);
+    for (int i = 0; i < len - 1; ++i) {
+        for (int j = 0; j < len - 1; ++j) {
             if (arr[i] + arr[j] == value) {
                 count++;
             }
         }
     }
-    return count;
+    return count / 2;
 }
 
 int countPairs2(int *arr, int len, int value) {
-    int temp = 0, count = 0;
-    for (int i = 0; i < len; ++i) {
-        for (int j = 0; j < len - 1 - i; ++j) {
-            if (arr[j] > arr[j + 1]) {
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-    for (int i = 0; i < len; ++i) {
-        for (int j = len; j >= len / 2 - 1; --j) {
+    int count = 0;
+    sort(arr, len);
+    for (int i = 0; i < len / 2; ++i) {
+        for (int j = len / 2; j >= 0; --j) {
             if (arr[i] + arr[j] == value) {
                 count++;
             }
         }
     }
-    return count;
+    if (count > 0) {
+        return count - 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 int countPairs3(int *arr, int len, int value) {
-    int temp = 0;
-    for (int i = 0; i < len; ++i) {
-        for (int j = 0; j < len - 1 - i; ++j) {
-            if (arr[j] > arr[j + 1]) {
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
     int count = 0;
+    sort(arr, len);
+    int left = 0, right = len - 1;
     for (int i = 0; i < len - 1; ++i) {
-        int left = i, right = len - 1;
-        while (right > left) {
-            int middle = (left + right) / 2;
-            if (arr[i] + arr[middle] == value) {
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (value == arr[mid] + arr[i]) {
                 count++;
-                int newmiddle = middle + 1;
-                while (arr[i] + arr[newmiddle] == value && newmiddle < right) {
+                int newmid = mid - 1;
+                while (arr[i] + arr[newmid] == value && left < right) {
                     count++;
-                    newmiddle++;
+                    left++;
                 }
-                newmiddle = middle - 1;
-                while (arr[i] + arr[newmiddle] == value && newmiddle > left) {
+                newmid = mid + 1;
+                while (arr[i] + arr[newmid] == value && left > right) {
                     count++;
-                    newmiddle--;
+                    right++;
                 }
-                break;
             }
-            if (arr[i] + arr[middle] > value) {
-                right = middle;
+            else if (value > arr[mid] + arr[i]) {
+                left = mid + 1;
             }
             else {
-                left = middle;
+                right = mid - 1;
             }
         }
     }
- return count;
+    if (count > 0) {
+        return count / 2;
+    }
+    else {
+        return 0;
+    }
 }
