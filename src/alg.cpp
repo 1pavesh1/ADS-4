@@ -7,7 +7,7 @@ void sort(int *arr, int len) {
                 temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
-            }
+            } 
         }
     }
 }
@@ -15,60 +15,56 @@ void sort(int *arr, int len) {
 int countPairs1(int *arr, int len, int value) {
     int count = 0;
     sort(arr, len);
-    for (int i = 0; i < len - 1; ++i) {
-        for (int j = 0; j < len - 1; ++j) {
+    for (int i = 0; i < len; ++i) {
+        for (int j = len - 1; j > i; --j) {
             if (arr[i] + arr[j] == value) {
                 count++;
             }
         }
     }
-    return count / 2;
+    return count;
 }
 
 int countPairs2(int *arr, int len, int value) {
     int count = 0;
     sort(arr, len);
-    for (int i = 0; i < len / 2; ++i) {
-        for (int j = len / 2; j >= 0; --j) {
+    for (int i = 0; i < len; ++i) {
+        for (int j = i - 1; j >= 0; --j) {
             if (arr[i] + arr[j] == value) {
                 count++;
-            }
+            } 
         }
     }
-    if (count > 0)
-        return count - 1;
-    else
-        return 0;
+    return count;
 }
 
-int countPairs3(int *arr, int len, int value) {
-    int count = 0;
+int countPairs3(int* arr, int len, int value) {
     sort(arr, len);
-    for (int i = 0; i < len - 1; ++i) {
-        int left = i, right = len - 1;
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (value == arr[mid] + arr[i]) {
+    int count = 0;
+    for (int i = 0; i < len - 1; i++) {
+        int l = i, r = len;
+        while (1 < r - l) {
+            int center = (l + r) / 2;
+            if (arr[i] + arr[center] == value) {
                 count++;
-                int newmid = mid - 1;
-                while (arr[i] + arr[newmid] == value && left < right) {
+                int j = center + 1;
+                while (arr[i] + arr[j] == value && j < r) {
                     count++;
-                    left++;
+                    j++;
                 }
-                newmid = mid + 1;
-                while (arr[i] + arr[newmid] == value && left > right) {
+                j = center - 1;
+                while (arr[i] + arr[j] == value && j > l) {
                     count++;
-                    right++;
+                    j--;
                 }
-            } else if (value > arr[mid] + arr[i]) {
-                left = mid + 1;
+                break;
+            }
+            if (arr[i] + arr[center] > value) {
+                r = center;
             } else {
-                right = mid - 1;
+                l = center;
             }
         }
     }
-    if (count > 0)
-        return count / 2;
-    else
-        return 0;
+    return count;
 }
