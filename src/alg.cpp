@@ -7,7 +7,7 @@ void sort(int *arr, int len) {
                 temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
-            } 
+            }
         }
     }
 }
@@ -32,7 +32,7 @@ int countPairs2(int *arr, int len, int value) {
         for (int j = i - 1; j >= 0; --j) {
             if (arr[i] + arr[j] == value) {
                 count++;
-            } 
+            }
         }
     }
     return count;
